@@ -4,4 +4,9 @@
 
 #resultContainer{
   margin-top:40px;
+  margin-left: 40px;
+}
+
+#flag{
+  width:250px;
 }

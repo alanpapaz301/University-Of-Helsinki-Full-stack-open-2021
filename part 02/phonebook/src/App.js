@@ -3,7 +3,7 @@ import Form from "./components/Form";
 import Search from "./components/Search";
 import "./App.css";
 import PhoneList from "./components/PhoneList";
-import axios from 'axios';
+import phonelistService from './services/phonelist';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,13 +12,11 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    phonelistService
+      .getAllPhones()
+      .then(initialPhones => {
+        setPersons(initialPhones)
+    })
   }, [])
 
   const handleFilterChange = (event) =>{
@@ -40,8 +38,8 @@ const App = () => {
     let newPerson = {
       name: newName,
       phone: newPhone,
-      id: newName,
     };
+    //Checks if the name already exists in the list
     let check = false;
     for (var i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
@@ -49,10 +47,15 @@ const App = () => {
         break;
       }
     }
+
     if (check === false) {
-      setPersons(persons.concat(newPerson));
-      setNewName("");
-      setNewPhone("");
+      phonelistService
+        .create(newPerson)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson));
+            setNewName("");
+            setNewPhone("");
+          })
     } else alert(newName + " is already added to phonebook");
   };
 

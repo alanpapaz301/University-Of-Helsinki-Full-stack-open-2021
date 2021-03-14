@@ -6,7 +6,7 @@ const Person = (props) => {
         <div id="persons">
          <h4>{props.person.name}  </h4>
          <h4>  {props.person.phone}</h4>
-
+        <button value ={props.person}>Delete</button>
 
 
         </div>

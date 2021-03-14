@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import Search from './components/Search';
-import Results from './components/Results';
+import ResultDisplay from './components/ResultDisplay';
 import './App.css';
 import axios from 'axios';
 
@@ -38,7 +38,7 @@ const App = () => {
   return (
     <div className="App">
       <Search searchFilter ={searchFilter} handleFilterChange = {handleFilterChange}/>
-      <Results results = {results} />
+      <ResultDisplay results = {results} handleFilterChange = {handleFilterChange} />
     </div>
   );
 }
