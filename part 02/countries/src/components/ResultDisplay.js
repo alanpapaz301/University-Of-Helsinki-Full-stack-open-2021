@@ -3,17 +3,18 @@ import Country from "./Country";
 import "../App.css";
 
 const ResultDisplay = (props) => {
+  let results = props.results();
   const resultsToShow = () => {
-    if (props.results.length > 10)
+    if (results.length > 10)
       return "Too many results, make search more specific";
 
-    else if (props.results.length === 1) {
-      return <Country country={props.results[0]} />;
+    else if (results.length === 1) {
+      return <Country country={results[0]} weatherData = {props.weatherData}  />;
 
     } else
       return (
         <div>
-          {props.results.map((country) => (
+          {results.map((country) => (
             <div>
               <p className="resultsP">{country.name}</p>
               <button value={country.name} onClick ={(event) =>props.handleFilterChange(event)}>show</button>

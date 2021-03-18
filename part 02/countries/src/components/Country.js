@@ -1,7 +1,18 @@
 import React from 'react';
+
 import '../App.css';
 
 const Country = (props) => {
+
+    const WeatherDisplay = () =>{
+        if(props.weatherData === "") return("Loading weather information...");
+        else return(
+            <p>Temperature:°C</p>
+
+
+        )
+    }
+
     return(
         <div>
             <h3>{props.country.name}</h3>
@@ -13,7 +24,10 @@ const Country = (props) => {
                     <li>{lang.name}</li>
                 ))}
             </ul>
-            <img id="flag" src = {props.country.flag}></img>            
+            <img id="flag" src = {props.country.flag}></img>     
+            <h4>Weather in {props.country.capital}</h4>
+            <WeatherDisplay/>
+
         </div>
 
 

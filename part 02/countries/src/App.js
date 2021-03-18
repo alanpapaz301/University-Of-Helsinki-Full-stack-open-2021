@@ -8,16 +8,15 @@ const App = () => {
 
   const [searchFilter,setSearchFilter] = useState("");
   const [results, setResults] = useState([]);
-  const [countries, setCountries] =useState("");
-
+  const [countries, setCountries] =useState([]);
+  const [weatherData, setWeatherData] = useState("");
+  const api_key = process.env.REACT_APP_API_KEY
 
   useEffect(() => {
     console.log('effect')
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
-        console.log('promise fulfilled')
-        console.log(response.data);
         setCountries(response.data);
       })
   }, [])
@@ -27,18 +26,31 @@ const App = () => {
     getResults();
   }
 
-  const getResults = () =>{
-    console.log("get",countries);
-    let filteredResults = countries.filter(country => country.name.toLowerCase().includes(searchFilter.toLowerCase()) === true);
-    setResults(filteredResults);
+  const getWeather = (cityName) =>{
+    console.log("getweather");
+    axios
+      .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${cityName}`)
+      .then(response => {
+        setWeatherData(response.data);
       }
+        )
+  }
 
-  
+  const getResults = () =>{
+    let filteredResults = countries.filter(country => country.name.toLowerCase().includes(searchFilter.toLowerCase()) === true);
+    if(filteredResults.length === 1){ 
+      getWeather(filteredResults[0].capital);
+    }
+    return filteredResults;
+    
+  }
+
+
 
   return (
     <div className="App">
       <Search searchFilter ={searchFilter} handleFilterChange = {handleFilterChange}/>
-      <ResultDisplay results = {results} handleFilterChange = {handleFilterChange} />
+      <ResultDisplay results = {getResults} handleFilterChange = {handleFilterChange} weatherData = {weatherData}/>
     </div>
   );
 }

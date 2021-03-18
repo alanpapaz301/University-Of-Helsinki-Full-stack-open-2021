@@ -47,7 +47,6 @@ const App = () => {
         break;
       }
     }
-
     if (check === false) {
       phonelistService
         .create(newPerson)
@@ -59,12 +58,20 @@ const App = () => {
     } else alert(newName + " is already added to phonebook");
   };
 
+  const removePerson = (event) =>{
+      phonelistService.remove(event.target.value)
+      let copy = [...persons];
+      copy.splice(event.target.value - 1,1);
+      console.log(copy);
+      setPersons(copy);
+  }
+
   return (
     <div className="mainContainer">
       <h2>Phonebook</h2>
       <Search filter ={filter} handleFilterChange ={handleFilterChange}/>
       <Form handleNameChange={handleNameChange} handlePhoneChange = {handlePhoneChange} addPerson ={addPerson} newName={newName} newPhone ={newPhone}/>
-      <PhoneList filteredResults ={filteredResults}/>
+      <PhoneList filteredResults ={filteredResults} removePerson={removePerson}/>
     </div>
   );
 };
