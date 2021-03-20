@@ -11,12 +11,16 @@ const App = () => {
   const [newPhone, setNewPhone] = useState("");
   const [filter, setFilter] = useState("");
 
-  useEffect(() => {
+  const getList = () => {
     phonelistService
-      .getAllPhones()
-      .then(initialPhones => {
-        setPersons(initialPhones)
-    })
+    .getAllPhones()
+    .then(initialPhones => {
+      setPersons(initialPhones)
+  })
+  }
+
+  useEffect(() => {
+    getList();
   }, [])
 
   const handleFilterChange = (event) =>{
@@ -41,9 +45,11 @@ const App = () => {
     };
     //Checks if the name already exists in the list
     let check = false;
+    let checkIndex = null;
     for (var i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
         check = true;
+        checkIndex = i;
         break;
       }
     }
@@ -55,15 +61,34 @@ const App = () => {
             setNewName("");
             setNewPhone("");
           })
-    } else alert(newName + " is already added to phonebook");
+    } else {
+      let updtConfirmation = window.confirm(persons[checkIndex].name + " is already in the list, would you like replace the registered number?");
+      if(updtConfirmation){
+        phonelistService
+          .update(newPerson,checkIndex+1)
+            .then(returnData => {
+              console.log(returnData);
+              let listCopy = [...persons];
+              listCopy[checkIndex] = returnData;
+              setPersons(listCopy);
+            })
+      }
+    }
   };
 
-  const removePerson = (event) =>{
+
+  const removePerson = (event, name) =>{
+    console.log(name);
+    let confirmation = window.confirm("Remover " + name + "?");
+    if(confirmation){
       phonelistService.remove(event.target.value)
-      let copy = [...persons];
-      copy.splice(event.target.value - 1,1);
+      .catch(error =>{
+        alert("errou")
+      })
+      let copy = persons.filter(ppl => ppl.id != event.target.value);
       console.log(copy);
       setPersons(copy);
+    }
   }
 
   return (

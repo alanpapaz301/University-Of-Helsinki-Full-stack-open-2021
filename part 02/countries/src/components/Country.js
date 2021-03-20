@@ -5,8 +5,11 @@ import '../App.css';
 const Country = (props) => {
 
     const WeatherDisplay = () =>{
-        if(props.weatherData === "") return("Loading weather information...");
-        else return(
+        if(props.weatherData === "") {
+            console.log("ta no display");
+            return("Loading weather information...");
+        }
+            else return(
             <p>Temperature:°C</p>
 
 

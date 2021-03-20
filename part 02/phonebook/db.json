@@ -1,3 +1,9 @@
 {
-  "phones": []
+  "phones": [
+    {
+      "name": "AFAFA",
+      "phone": "9999999",
+      "id": 1
+    }
+  ]
 }

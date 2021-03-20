@@ -27,13 +27,9 @@ const App = () => {
   }
 
   const getWeather = (cityName) =>{
-    console.log("getweather");
-    axios
-      .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${cityName}`)
-      .then(response => {
-        setWeatherData(response.data);
-      }
-        )
+    console.log("getweather", cityName);
+    setWeatherData("");
+        
   }
 
   const getResults = () =>{
