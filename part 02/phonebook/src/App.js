@@ -3,6 +3,7 @@ import Form from "./components/Form";
 import Search from "./components/Search";
 import "./App.css";
 import PhoneList from "./components/PhoneList";
+import Notification from "./components/Notification";
 import phonelistService from './services/phonelist';
 
 const App = () => {
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState(null);
+
 
   const getList = () => {
     phonelistService
@@ -60,7 +63,12 @@ const App = () => {
             setPersons(persons.concat(returnedPerson));
             setNewName("");
             setNewPhone("");
+            setMessage({type:'ok',content:returnedPerson.name + " added sucesfully"})
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
           })
+
     } else {
       let updtConfirmation = window.confirm(persons[checkIndex].name + " is already in the list, would you like replace the registered number?");
       if(updtConfirmation){
@@ -72,6 +80,12 @@ const App = () => {
               listCopy[checkIndex] = returnData;
               setPersons(listCopy);
             })
+            .catch(error =>{
+              setMessage({type:'error',content:"Phone not found in server, please refresh"})
+            })
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
       }
     }
   };
@@ -79,21 +93,27 @@ const App = () => {
 
   const removePerson = (event, name) =>{
     console.log(name);
-    let confirmation = window.confirm("Remover " + name + "?");
+    let confirmation = window.confirm("Remove " + name + "?");
     if(confirmation){
       phonelistService.remove(event.target.value)
       .catch(error =>{
-        alert("errou")
+        setMessage({type:'error',content:"Phone not found in server, please refresh"})
       })
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+
       let copy = persons.filter(ppl => ppl.id != event.target.value);
       console.log(copy);
       setPersons(copy);
+      
     }
   }
 
   return (
     <div className="mainContainer">
       <h2>Phonebook</h2>
+      <Notification message = {message} />
       <Search filter ={filter} handleFilterChange ={handleFilterChange}/>
       <Form handleNameChange={handleNameChange} handlePhoneChange = {handlePhoneChange} addPerson ={addPerson} newName={newName} newPhone ={newPhone}/>
       <PhoneList filteredResults ={filteredResults} removePerson={removePerson}/>
