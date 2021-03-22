@@ -7,7 +7,7 @@ const Form = (props) =>{
         <div>
             
           <div id="inputs">
-            <h4>Add new contact</h4>
+            <h4>Add new phone</h4>
             <label>Name: </label>
             <input value={props.newName} onChange={props.handleNameChange} />
             <label>Phone: </label>

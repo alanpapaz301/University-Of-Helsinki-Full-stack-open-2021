@@ -5,11 +5,13 @@ import '../App.css';
 const PhoneList = (props) => {
     return(
         <div className="phonebookDisplay">
-        <h3>Phone list</h3> 
+        <h3 style = {{textAlign:'center'}}>Phone list</h3> 
         {props.filteredResults.map((person) => (
           <div>
-         <Person key={person.id} person={person} />
-          <button value ={person.id} onClick={(event) => props.removePerson(event, person.name)}>Delete</button>
+            <div className = "individualPhones">
+              <Person key={person.id} person={person} />
+              <button value ={person.id} onClick={(event) => props.removePerson(event, person.name)}>Delete</button>
+          </div>
           </div>
         ))}
         </div>
